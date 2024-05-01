@@ -40,6 +40,7 @@ def create_video_from_images(image_folder, output_folder, fps, segment_duration,
     if img_array:
         save_video(img_array, output_folder, segment_index, fps)
         print(f"Segment {segment_index} video created with {len(img_array)} frames. All segments completed.")
+        img_array = []
 
 def save_video(images, output_folder, index, fps):
     now = datetime.datetime.now()
@@ -60,6 +61,7 @@ def save_video(images, output_folder, index, fps):
     for image in images:
         out.write(image)
     out.release()
+    
 
 def main():
     parser = argparse.ArgumentParser(description="Create videos from images.")
