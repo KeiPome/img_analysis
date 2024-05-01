@@ -3,6 +3,7 @@ import re
 import glob
 import cv2
 import argparse
+import datetime
 
 def atoi(text):
     return int(text) if text.isdigit() else text
@@ -41,6 +42,16 @@ def create_video_from_images(image_folder, output_folder, fps, segment_duration,
         print(f"Segment {segment_index} video created with {len(img_array)} frames. All segments completed.")
 
 def save_video(images, output_folder, index, fps):
+    now = datetime.datetime.now()
+    output_folder = f"{output_folder}/{now.strftime('%Y-%m-%d')}"
+    
+    try:
+        os.makedirs(output_folder)
+        print(f"Created folder: {output_folder}")
+    except FileExistsError:
+        print(f"Folder already exists: {output_folder}")
+        pass
+    
     height, width, layers = images[0].shape
     size = (width, height)
     video_path = os.path.join(output_folder, f"{index}.mp4")
@@ -58,7 +69,7 @@ def main():
     parser.add_argument("--segment_duration", type=int, default=5, help="Duration of each video segment in minutes.")
     parser.add_argument("--start_frame", type=int, default=0, help="Start frame to begin creating video.")
     parser.add_argument("--end_frame", type=int, default=None, help="End frame to stop creating video.")
-
+    
     args = parser.parse_args()
     
     create_video_from_images(
